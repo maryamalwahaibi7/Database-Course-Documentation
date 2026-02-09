@@ -1,0 +1,47 @@
+1. What is a SELECT statement?
+It is an SQL command used to retrieve data from one or more tables in a database.
+
+2. Why do we use SELECT?
+We use SELECT to access and view stored data without changing it.
+
+
+3. What is the basic SELECT syntax?
+It selects specific columns from a table using:
+
+SELECT column1, column2 FROM table_name;
+
+
+4. What is SELECT with WHERE clause used for?
+It filters the results and returns only rows that match a condition.
+
+
+5. What are comparison operators in SQL?
+They compare values in conditions, such as equal, greater than, or not equal.
+
+| Operator | Meaning               |
+| -------- | --------------------- |
+| =        | Equal                 |
+| <        | Less than             |
+| >        | Greater than          |
+| <=       | Less than or equal    |
+| >=       | Greater than or equal |
+| <>       | Not equal             |
+| !=       | Not equal             |
+
+
+6. What are logical operators in SQL?
+They combine multiple conditions to make queries more specific.
+
+Logical operators are used to combine multiple conditions in a WHERE clause. AND returns records only if all conditions are true, OR returns records if at least one condition is true, and NOT reverses a condition to exclude certain records.
+
+7. What is ORDER BY clause used for?
+It arranges the result set in ascending or descending order.
+
+8. What is DISTINCT keyword used for?
+It removes repeated values and shows only unique results.
+
+
+9. What is TOP / LIMIT clause used for?
+It restricts the number of rows returned by a query.
+
+
