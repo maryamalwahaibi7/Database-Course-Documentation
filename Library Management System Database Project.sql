@@ -214,3 +214,135 @@ values (5,'Excellent book','2026-02-09',1,1),
 
 select * from Review
 
+-- DAY 1: Basic SELECT Queries
+
+--Part 1: Basic SELECT - Retrieving All Data
+--Task 1.1:Retrieve all columns from Library table
+select * from Libraries
+
+--Task 1.2:Retrieve all columns from Members table
+select * from Members
+
+--Task 1.3:Retrieve all columns from Books table
+select * from Book
+
+--Part 2:Selecting Specific Columns
+--Task 2.1:Display only the Name and Location of all libraries
+SELECT LibraryName, LibraryLocation
+FROM Libraries; 
+
+--Task 2.2:Show the Title, Genre, and Price of all books
+SELECT Title, Genre, Price
+FROM Book;
+
+--Task 2.3:List the FullName and Email of all members
+SELECT FullName, Email
+FROM Members;
+
+--Task 2.4:Display StaffID, FullName, and Position from the Staff table
+SELECT StaffID, FullName, Position
+FROM Staff; 
+
+--Part 3: Using WHERE Clause - Simple Conditions
+--Task 3.1:Find all books with Genre = 'Fiction' 
+SELECT *
+FROM Book
+WHERE Genre = 'Fiction';
+
+--Task 3.2: Retrieve all libraries located in 'Muscat'
+SELECT *
+FROM Libraries
+WHERE LibraryLocation = 'Muscat';
+
+--Task 3.3: Display all books where IsAvailable = TRUE (or 1)
+SELECT *
+FROM Book
+WHERE IsAvailable = 1;
+
+--Task 3.4: Find all staff members with Position = 'Librarian'
+SELECT *
+FROM Staff
+WHERE Position = 'Librarian'; 
+
+--Task 3.5: Show all loans with Status = 'Overdue'
+SELECT *
+FROM Loan 
+WHERE LStatus = 'Overdue';
+
+--Part 4: Comparison Operators
+--Task 4.1: Find all books with Price greater than 20
+SELECT *
+FROM Book
+WHERE Price > 20; 
+
+--Task 4.2: Retrieve libraries established before 2010
+SELECT *
+FROM Libraries
+WHERE EstablishedYear < 2010; 
+
+--Task 4.3: Find all payments with Amount >= 3
+SELECT *
+FROM Payment
+WHERE Amount >= 3; 
+
+--Task 4.4: Show books where Price is less than or equal to 15
+SELECT *
+FROM Book
+WHERE Price <= 15; 
+
+--Task 4.5: Display reviews with Rating not equal to 5
+SELECT *
+FROM Review
+WHERE Rating <> 5; 
+
+--Part 5: Logical Operators (AND, OR, NOT)
+--Task 5.1: Find books that are Fiction AND available
+SELECT *
+FROM Book
+WHERE Genre = 'Fiction' AND IsAvailable = 1;
+
+--Task 5.2: Retrieve books where Genre is 'Fiction' OR 'Children'
+SELECT *
+FROM Book
+WHERE Genre = 'Fiction' OR Genre = 'Children';
+
+--Task 5.3: Find libraries established after 2010 AND located in 'Ibra'
+SELECT *
+FROM Libraries
+WHERE EstablishedYear > 2010 AND LibraryLocation = 'Ibra'; 
+
+--Task 5.4: Show books with Price between 10 AND 30
+SELECT *
+FROM Book
+WHERE Price >= 10 AND Price <= 30;
+
+--Task 5.5: Display loans that are NOT 'Returned'
+SELECT *
+FROM Loan
+WHERE LStatus <> 'Returned';
+
+--Part 6: ORDER BY Clause
+--Task 6.1: List all books ordered by Title in ascending order (A–Z)
+SELECT *
+FROM Book
+ORDER BY Title ASC; 
+
+--Task 6.2: Show all books ordered by Price in descending order (highest first)
+SELECT *
+FROM Book
+ORDER BY Price DESC; 
+
+--Task 6.3: Display members ordered by MembershipStartDate, newest first
+SELECT *
+FROM Members
+ORDER BY MembershipStartDate DESC; 
+
+--Task 6.4: List libraries ordered by EstablishedYear in ascending order (oldest first)
+SELECT *
+FROM Libraries
+ORDER BY EstablishedYear ASC;
+
+--Task 6.5: Show reviews ordered by Rating DESC, then by ReviewDate ASC
+SELECT *
+FROM Review
+ORDER BY Rating DESC, ReviewDate ASC; 
