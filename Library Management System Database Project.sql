@@ -346,3 +346,151 @@ ORDER BY EstablishedYear ASC;
 SELECT *
 FROM Review
 ORDER BY Rating DESC, ReviewDate ASC; 
+
+--Day 2: Advanced SELECT Queries
+
+--Part 7: DISTINCT Keyword
+--Task 7.1:List all unique book genres from the Books table
+SELECT DISTINCT Genre
+FROM Book;
+
+--Task 7.2: Show all unique locations from the Library table
+SELECT DISTINCT LibraryLocation
+FROM Libraries; 
+
+--Task 7.3: Display all unique staff positions from the Staff table
+SELECT DISTINCT Position
+FROM Staff;
+
+--Task 7.4: Find all unique loan statuses from the Loans table
+SELECT DISTINCT LStatus
+FROM Loan;
+
+--Part 8: TOP/LIMIT Clause
+--Task 8.1: Display the top 5 most expensive books (ordered by Price DESC).
+SELECT TOP 5 *
+FROM Book
+ORDER BY Price DESC;
+
+--Task 8.2: Show the first 10 members who joined
+SELECT TOP 10 *
+FROM Members
+ORDER BY MembershipStartDate ASC;
+
+--Task 8.3: Retrieve the 3 oldest libraries
+SELECT TOP 3 *
+FROM Libraries
+ORDER BY EstablishedYear ASC;
+
+--Task 8.4: Display the top 5 highest-rated reviews
+SELECT TOP 5 *
+FROM Review
+ORDER BY Rating DESC;
+
+--Part 9: LIKE Operator for Pattern Matching
+--Task 9.1: Find all books whose title starts with 'The'
+SELECT *
+FROM Book
+WHERE Title LIKE 'The%'; 
+
+--Task 9.2: Retrieve members whose email contains 'gmail.com'
+SELECT *
+FROM Members
+WHERE Email LIKE '%example.com%';
+
+--Task 9.3: Find all libraries whose name ends with 'Library'
+SELECT *
+FROM Libraries
+WHERE LibraryName LIKE '%Library';
+
+--Task 9.4: Show books with titles containing the word 'Code' anywhere in the title
+SELECT *
+FROM Book
+WHERE Title LIKE '%Code%';
+
+--Task 9.5: Find staff members whose names start with 'H'
+SELECT *
+FROM Staff
+WHERE FullName LIKE 'H%'; 
+
+--Part 10: Working with NULL Values
+--Task 10.1: Find all loans where ReturnDate IS NULL
+SELECT *
+FROM Loan
+WHERE ReturnDate IS NULL; 
+
+--Task 10.2: Show all loans where ReturnDate IS NOT NULL
+SELECT *
+FROM Loan
+WHERE ReturnDate IS NOT NULL;
+
+--Task 10.3: Display reviews where Comments IS NULL or equals 'No comments'
+SELECT *
+FROM Review 
+WHERE Comments IS NULL OR Comments = 'No comments';
+
+--Part 11: Complex Combined Queries
+--Task 11.1: Find all Fiction books that are available and cost less than $25, ordered by price
+SELECT *
+FROM Book
+WHERE Genre = 'Fiction'
+  AND IsAvailable = 1
+  AND Price < 25
+ORDER BY Price ASC;
+
+--Task 11.2: Retrieve the top 5 most recent overdue loans
+SELECT TOP 5 *
+FROM Loan
+WHERE LStatus = 'Overdue'
+ORDER BY DueDate DESC;
+
+--Task 11.3: Show all libraries in 'Barka' or 'Muscat' established after 2005, ordered by name
+SELECT *
+FROM Libraries
+WHERE (LibraryLocation = 'Barka' OR LibraryLocation = 'Muscat')
+  AND EstablishedYear > 2005
+ORDER BY LibraryName ASC
+
+--Task 11.4: Find books with 'Fiction' or 'Children' genre, price between $10–$30, currently available
+SELECT *
+FROM Book
+WHERE (Genre = 'Fiction' OR Genre = 'Children')
+  AND Price >= 10 AND Price <= 30
+  AND IsAvailable = 1;
+
+--Task 11.5: Display members who joined in 2023 or 2026, with Gmail accounts, ordered by join date
+SELECT *
+FROM Members
+WHERE (YEAR(MembershipStartDate) = 2023
+    OR YEAR(MembershipStartDate) = 2026)
+  AND Email LIKE '%example.com%'
+ORDER BY MembershipStartDate ASC;
+
+--Part 12: Challenge Queries
+--Task 12.1: Find the 10 most expensive available books in 'Fiction' or 'Non-fiction' genres
+SELECT TOP 10 *
+FROM Book
+WHERE IsAvailable = 1
+  AND (Genre = 'Fiction' OR Genre = 'Non-fiction')
+ORDER BY Price DESC;
+
+--Task 12.2: Find all loans issued in 2026 that are still not returned, ordered by loan date
+SELECT *
+FROM Loan
+WHERE YEAR(LoanDate) = 2026
+  AND ReturnDate IS NULL
+ORDER BY LoanDate ASC;
+
+--Task 12.3: Show staff working at libraries established before 2010, with position 'Librarian' or 'Assistant'
+SELECT S.*
+FROM Staff S
+JOIN Libraries L ON S.LID = L.LibraryID 
+WHERE L.EstablishedYear < 2010
+  AND (S.Position = 'Librarian' OR S.Position = 'Assistant');
+
+--Task 12.4: Display all books that have never been reviewed
+SELECT B.*
+FROM Book B
+LEFT JOIN Review R ON B.BookID = R.BID
+WHERE R.BID IS NULL;
+
