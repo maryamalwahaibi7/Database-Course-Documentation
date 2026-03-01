@@ -494,3 +494,319 @@ FROM Book B
 LEFT JOIN Review R ON B.BookID = R.BID
 WHERE R.BID IS NULL;
 
+--SQL JOIN
+
+--Session 1: Understanding the Concept
+--Task 1.1: Look at the Loan table. Which column connects it to the Member table?
+--Answer: MemberID 
+
+--Task 1.2: Which column connects the Loan table to the Book table?
+--Answer: BookID
+
+--Task 1.3: Which column connects the Staff table to the Library table?
+--Answer: LibraryID
+
+--Task 1.4: Which column connects the Review table to the Book table?
+--Answer: BookID
+
+--Session 2: INNER JOIN - Matching Data
+--Part A: Two-Table INNER JOINs
+--Task 2.1: Display all loans with the book titles
+SELECT L.LoanID, B.Title, L.LoanDate, L.DueDate
+FROM Loan L
+INNER JOIN Book B
+ON L.BID = B.BookID;
+
+--Task 2.2: Show all staff members with their library names
+SELECT S.FullName, S.Position, L.LibraryName, L.LibraryLocation
+FROM Staff S
+INNER JOIN Libraries L
+ON S.LID = L.LibraryID; 
+
+--Task 2.3: Display all books with their library information
+SELECT B.Title, B.Genre, B.Price, L.LibraryName, L.LibraryLocation
+FROM Book B
+INNER JOIN Libraries L
+ON B.LID = L.LibraryID; 
+
+--Task 2.4: Show all reviews with member names
+SELECT M.FullName, R.Rating, R.Comments, R.ReviewDate
+FROM Review R
+INNER JOIN Members M
+ON R.MID = M.MemberID;
+
+--Task 2.5: Display all reviews with book titles
+SELECT B.Title, R.Rating, R.Comments, R.ReviewDate
+FROM Review R
+INNER JOIN Book B
+ON R.BID = B.BookID;
+
+--Task 2.6: Show all payments with loan information
+SELECT L.LoanID, P.PaymentDate, P.Amount, P.Method, L.LStatus
+FROM Payment P
+INNER JOIN Loan L
+ON P.LoanID = L.LoanID; 
+
+--Part B: Three-Table INNER JOINs
+--Task 2.7: Show member names, book titles, and loan dates together
+SELECT M.FullName, B.Title, L.LoanDate, L.DueDate, L.LStatus
+FROM Members M
+INNER JOIN Loan L
+ON M.MemberID = L.MID
+INNER JOIN Book B
+ON L.BID = B.BookID;
+
+--Task 2.8: Display reviews with both member names and book titles
+SELECT M.FullName, B.Title, R.Rating, R.Comments
+FROM Review R
+INNER JOIN Members M
+ON R.MID = M.MemberID
+INNER JOIN Book B
+ON R.BID = B.BookID;
+
+--Task 2.9: Show books with their library name and location
+SELECT B.Title, B.Genre, L.LibraryName, L.LibraryLocation, L.ContactNumber
+FROM Book B
+INNER JOIN Libraries L
+ON B.LID = L.LibraryID;
+
+--Task 2.10: Display complete loan information: member name, book title, loan dates, and status
+SELECT M.FullName, M.Email, B.Title, B.Genre, L.LoanDate, L.DueDate, L.ReturnDate, L.LStatus
+FROM Members M
+INNER JOIN Loan L
+ON M.MemberID = L.MID
+INNER JOIN Book B
+ON L.BID = B.BookID;
+
+--Session 3: LEFT JOIN - Keep All Left Records
+--Task 3.1: Show ALL books and their reviews (if any)
+SELECT B.Title, B.Genre, R.Rating, R.Comments
+FROM Book B
+LEFT JOIN Review R
+ON B.BookID = R.BID; 
+
+--Task 3.2: Display ALL members with their loan information (if they have any loans)
+SELECT M.FullName, M.Email, L.LoanDate, L.DueDate, L.LStatus 
+FROM Members M
+LEFT JOIN Loan L
+ON M.MemberID = L.MID;
+
+--Task 3.3: Show ALL loans with payment information (if any)
+SELECT L.LoanID, L.LoanDate, L.LStatus, P.PaymentDate, P.Amount
+FROM Loan L
+LEFT JOIN Payment P
+ON L.LoanID = P.LoanID;
+
+--Task 3.4: Display ALL libraries with their staff (if any)
+SELECT L.LibraryName, L.LibraryLocation, S.FullName, S.Position
+FROM Libraries L
+LEFT JOIN Staff S
+ON L.LibraryID = S.LID;
+
+--Task 3.5: Find members who have NEVER borrowed a book
+SELECT M.FullName, M.Email
+FROM Members M
+LEFT JOIN Loan L
+ON M.MemberID = L.MID
+WHERE L.LoanID IS NULL;
+
+--Task 3.6: Find books that have NEVER been reviewed
+SELECT B.Title, B.Genre, B.Price
+FROM Book B
+LEFT JOIN Review R
+ON B.BookID = R.BID
+WHERE R.ReviewID IS NULL;
+
+--Task 3.7: Show ALL books with member names who reviewed them (if reviewed)
+SELECT B.Title, M.FullName, R.Rating, R.Comments
+FROM Book B
+LEFT JOIN Review R
+ON B.BookID = R.BID
+LEFT JOIN Members M
+ON R.MID = M.MemberID;
+
+--Session 4: RIGHT JOIN - Keep All Right Records
+--Task 4.1: Rewrite Task 3.1 using RIGHT JOIN instead of LEFT JOIN
+SELECT B.Title, B.Genre, R.Rating, R.Comments
+FROM Review R
+RIGHT JOIN Book B
+ON R.BID = B.BookID;
+
+--Task 4.2: Show ALL members with their loans using RIGHT JOIN
+SELECT M.FullName, M.Email, L.LoanDate, L.DueDate, L.LStatus
+FROM Loan L
+RIGHT JOIN Members M
+ON M.MemberID = L.MID;
+
+--Task 4.3: Display ALL books using RIGHT JOIN with Library table
+SELECT L.LibraryName, B.Title, B.Genre
+FROM Libraries L
+RIGHT JOIN Book B
+ON L.LibraryID = B.LID;
+
+--Task 4.4: Compare the results (same query using LEFT JOIN and RIGHT JOIN)
+--A) Using LEFT JOIN
+SELECT S.FullName, S.Position, L.LibraryName, L.LibraryLocation
+FROM Staff S
+LEFT JOIN Libraries L
+ON S.LID = L.LibraryID;
+
+--B) Using RIGHT JOIN (same result, tables swapped)
+SELECT S.FullName, S.Position, L.LibraryName, L.LibraryLocation
+FROM Libraries L
+RIGHT JOIN Staff S
+ON S.LID = L.LibraryID;
+
+--Session 5: FULL OUTER JOIN - Keep Everything
+--Task 5.1: Show ALL books and ALL reviews (whether matched or not)
+SELECT B.Title, R.Rating, R.Comments
+FROM Book B
+FULL OUTER JOIN Review R
+ON B.BookID = R.BID;
+
+--Task 5.2: Display ALL loans and ALL payments
+SELECT L.LoanID, L.LoanDate, P.PaymentDate, P.Amount
+FROM Loan L
+FULL OUTER JOIN Payment P
+ON L.LoanID = P.LoanID;
+
+--Task 5.3: Show complete data: ALL members and ALL books (through loans)
+SELECT M.FullName, B.Title, L.LoanDate, L.DueDate, L.LStatus
+FROM Members M
+FULL OUTER JOIN Loan L
+ON M.MemberID = L.MID
+FULL OUTER JOIN Book B
+ON L.BID = B.BookID;
+
+--Session 6: Combining Multiple JOIN Types
+--Task 6.1: Show all ACTIVE loans (INNER JOIN) with member info and payment info (LEFT JOIN for payments)
+SELECT M.FullName, L.LoanDate, L.DueDate, L.LStatus, P.PaymentDate, P.Amount
+FROM Loan L
+INNER JOIN Members M
+ON M.MemberID = L.MID
+LEFT JOIN Payment P
+ON L.LoanID = P.LoanID
+WHERE L.LStatus = 'Active';
+
+--Task 6.2: Display all books (INNER JOIN Library) and their reviews (LEFT JOIN Review)
+SELECT L.LibraryName, B.Title, B.Genre, R.Rating, R.Comments
+FROM Libraries L
+INNER JOIN Book B
+ON L.LibraryID = B.LID
+LEFT JOIN Review R
+ON B.BookID = R.BID;
+
+--Task 6.3: Show member borrowing history with book and library information
+SELECT M.FullName, B.Title, Lb.LibraryName, Ln.LoanDate, Ln.ReturnDate
+FROM Members M
+INNER JOIN Loan Ln
+ON M.MemberID = Ln.MID
+INNER JOIN Book B
+ON Ln.BID = B.BookID
+INNER JOIN Libraries Lb
+ON B.LID = Lb.LibraryID;
+
+--Session 7: Real-World Challenge Queries
+--Challenge 7.1: Library Performance Report
+SELECT L.LibraryName,
+       COUNT(DISTINCT B.BookID),
+       COUNT(DISTINCT S.StaffID),
+       COUNT(DISTINCT Ln.LoanID)
+FROM Libraries L
+LEFT JOIN Book B
+ON L.LibraryID = B.LID
+LEFT JOIN Staff S
+ON L.LibraryID = S.LID
+LEFT JOIN Loan Ln
+ON B.BookID = Ln.BID
+GROUP BY L.LibraryName;
+
+--Challenge 7.2: Member Activity Summary
+SELECT M.FullName, M.Email,
+       COUNT(DISTINCT Ln.LoanID),
+       COUNT(DISTINCT R.ReviewID)
+FROM Members M
+LEFT JOIN Loan Ln
+ON M.MemberID = Ln.MID
+LEFT JOIN Review R
+ON M.MemberID = R.MID
+GROUP BY M.FullName, M.Email;
+
+--Challenge 7.3: Book Popularity Analysis
+SELECT B.Title, L.LibraryName,
+       COUNT(DISTINCT Ln.LoanID),
+       AVG(R.Rating),
+       COUNT(DISTINCT R.ReviewID)
+FROM Book B
+INNER JOIN Libraries L
+ON B.LID = L.LibraryID
+LEFT JOIN Loan Ln
+ON B.BookID = Ln.BID
+LEFT JOIN Review R
+ON B.BookID = R.BID
+GROUP BY B.Title, L.LibraryName;
+
+--Challenge 7.4: Overdue Books Report
+SELECT M.FullName, M.Email, B.Title, L.LibraryName,
+       DATEDIFF(DAY, Ln.DueDate, GETDATE()),
+       P.Amount
+FROM Loan Ln
+INNER JOIN Members M
+ON M.MemberID = Ln.MID
+INNER JOIN Book B
+ON Ln.BID = B.BookID
+INNER JOIN Libraries L
+ON B.LID = L.LibraryID
+LEFT JOIN Payment P
+ON Ln.LoanID = P.LoanID
+WHERE Ln.LStatus = 'Overdue';
+
+--Challenge 7.5: Complete Member Loan History
+SELECT M.FullName, B.Title, B.Genre, L.LibraryLocation,
+       Ln.LoanDate, Ln.ReturnDate,
+       DATEDIFF(DAY, Ln.LoanDate, Ln.ReturnDate),
+       R.Rating
+FROM Members M
+INNER JOIN Loan Ln
+ON M.MemberID = Ln.MID
+INNER JOIN Book B
+ON Ln.BID = B.BookID
+INNER JOIN Libraries L
+ON B.LID = L.LibraryID
+LEFT JOIN Review R
+ON R.MID = M.MemberID
+AND R.BID = B.BookID;
+
+--Challenge 7.6: Books Never Borrowed
+SELECT B.Title, B.Genre, B.Price, L.LibraryName
+FROM Book B
+INNER JOIN Libraries L
+ON B.LID = L.LibraryID
+LEFT JOIN Loan Ln
+ON B.BookID = Ln.BID
+WHERE Ln.LoanID IS NULL;
+
+--Challenge 7.7: Members With No Activity
+SELECT M.FullName, M.Email
+FROM Members M
+LEFT JOIN Loan Ln
+ON M.MemberID = Ln.MID
+LEFT JOIN Review R
+ON M.MemberID = R.MID
+WHERE Ln.LoanID IS NULL
+AND R.ReviewID IS NULL;
+
+--Challenge 7.8: Staff Workload Analysis
+SELECT S.FullName, S.Position, L.LibraryName,
+       COUNT(DISTINCT B.BookID),
+       COUNT(DISTINCT Ln.LoanID)
+FROM Staff S
+INNER JOIN Libraries L
+ON S.LID = L.LibraryID
+LEFT JOIN Book B
+ON L.LibraryID = B.LID
+LEFT JOIN Loan Ln
+ON B.BookID = Ln.BID
+AND Ln.LStatus = 'Active'
+GROUP BY S.FullName, S.Position, L.LibraryName;
+
